@@ -1,6 +1,4 @@
-﻿using EscapeTheCrypt.Model;
-
-namespace EscapeTheCrypt.Model.ItemType
+﻿namespace EscapeTheCrypt.Model.ItemType
 {
     public class Key : Item
     {

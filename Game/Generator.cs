@@ -1,29 +1,27 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using EscapeTheCrypt.Model;
+﻿using EscapeTheCrypt.Model;
 using EscapeTheCrypt.Model.Entities;
+using EscapeTheCrypt.Model.Entities.Enemies;
+using System;
+using System.Linq;
 
 namespace EscapeTheCrypt.Game
 {
-    public class Generator
+    public static class Generator
     {
-        public static Room Entrance = new("Heart", "The start of your adventure!", []);
+        public static readonly Room Entrance = new("Heart of the Crypt", "The start of your adventure!", []);
         public static Player Player;
-        public static List<Room> Map = [Entrance];
+        public static List<Room> Map { get; set; } = [Entrance];
         public static void GenerateMap(int size)
         {
             for (int i = 0; i < size; i++)
             {
-                return;
+                Map.Add(new Room($"{new Random().Next(0, 1000)}", "", [new Zombie(20), new Skeleton(15)]));
             }
         }
 
         public static void GeneratePlayer(String name)
         {
-            Player = new Player(name, Entrance);
+            Player = new Player(name, 100, Entrance);
         }
     }
 }

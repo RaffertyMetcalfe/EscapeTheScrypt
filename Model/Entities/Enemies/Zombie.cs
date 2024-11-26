@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using EscapeTheCrypt.Model;
 
 namespace EscapeTheCrypt.Model.Entities.Enemies
 {
@@ -11,7 +7,7 @@ namespace EscapeTheCrypt.Model.Entities.Enemies
     {
         public override Dictionary<Item, int> Loot { get; protected set; }
 
-        public Zombie(Room startingRoom, int health) : base(startingRoom, health)
+        public Zombie(int health) : base(health)
         {
             Loot = new Dictionary<Item, int>
             {

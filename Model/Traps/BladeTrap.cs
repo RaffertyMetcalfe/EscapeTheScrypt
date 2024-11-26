@@ -7,8 +7,9 @@ using EscapeTheCrypt.Model.Entities;
 
 namespace EscapeTheCrypt.Model.Traps
 {
-    public class Blade : Trap
+    public class BladeTrap : Trap
     {
+        public String Name { get; private set; } = "Blade Trap";
         public override void activate(Player target)
         {
             target.Damage(10, "slashing");

@@ -1,22 +1,28 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using EscapeTheCrypt.Model.ItemType;
+using System;
 using System.Linq;
-using EscapeTheCrypt.Model;
-using EscapeTheCrypt.Model.ItemType;
+using System.Runtime.InteropServices.Swift;
 
 namespace EscapeTheCrypt.Model.Entities
 {
     public class Player : Entity
     {
+        public Room Location { get; set; }
         public String Name { get; private set; }
         public int Health { get; private set; } = 100;
         public int InventorySize { get; private set; } = 10;
-        public Weapon EquippedWeapon { get; private set; }
+        public Weapon EquippedWeapon { get; private set; } = new Weapon("Fist", "A bare hand", 1, 2147483647, "impact");
         private List<Item> Inventory { get; } = new List<Item>();
+        private Dictionary<String, Item> ArmourSlots { get; }
 
-        public Player(String name, Room startingRoom) : base(startingRoom)
+        public Player(String name, int health, Room location) : base(health)
         {
+            Location = location;
             Name = name;
+            ArmourSlots = new Dictionary<String, Item>
+            {
+                {"head", null }, { "torso", null }, {"leftarm", null}, {"rightarm", null}, {"leftleg",null}
+            };
         }
 
         public void PickUp(Item item)
@@ -85,11 +91,18 @@ namespace EscapeTheCrypt.Model.Entities
 
         public void EquipItem(String itemName)
         {
-            var item = FindItemInInventory(itemName) as Weapon;
+            var item = FindItemInInventory(itemName);
             if (item != null)
             {
-                EquippedWeapon = item;
                 Console.WriteLine($"{Name} equips {item.Name}.");
+                if (item.GetType() == typeof(Weapon))
+                { 
+                    EquippedWeapon = (Weapon) item;
+                } else if (item.GetType() == typeof(ArmourPiece))
+                {
+                    ArmourPiece Piece = (ArmourPiece) item;
+                    this.Protection[Piece.BodyPart] = Piece.Protection;
+                }
             }
             else
             {
@@ -117,7 +130,7 @@ namespace EscapeTheCrypt.Model.Entities
 
         private Item FindItemInInventory(String itemName)
         {
-            if(Inventory != null) 
+            if (Inventory != null)
             {
                 return Inventory.FirstOrDefault(item => item.Name == itemName);
             }

@@ -1,8 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using EscapeTheCrypt.Model.Entities;
+﻿using EscapeTheCrypt.Model.Entities;
 using EscapeTheCrypt.Model.ItemType;
+using System;
+using System.Linq;
 
 namespace EscapeTheCrypt.Model
 {
@@ -19,14 +18,18 @@ namespace EscapeTheCrypt.Model
 
         public Dictionary<String, Room> Exits { get; private set; } = new Dictionary<String, Room>();
         public Dictionary<Item, int> Items { get; private set; } = new Dictionary<Item, int>();
-        public List<Enemy> Enemies { get; private set; } = new List<Enemy>();
+        public List<Enemy> Enemies { get; private set; }
         public List<Trap> Traps { get; private set; } = new List<Trap>();
 
-        public Room(String name, String description, List<Enemy> enemies, bool locked = false)
+        public Room(String name, String description, List<Enemy> enemies, List<Trap>? traps = null, bool locked = false)
         {
             Name = name;
             Description = description;
             Enemies = enemies;
+            for (int i = 0; i < enemies.Count; i++)
+            {
+                enemies[i].Location = this;
+            }
             _locked = locked;
         }
 

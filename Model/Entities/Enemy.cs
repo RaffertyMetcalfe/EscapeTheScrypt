@@ -11,7 +11,7 @@ namespace EscapeTheCrypt.Model.Entities
         public bool Aggressive { get; private set; } = true;
         public virtual Dictionary<Item, int> Loot { get; protected set; } = new Dictionary<Item, int>();
 
-        public Enemy(Room startingRoom, int health) : base(startingRoom)
+        public Enemy(int health) : base(health)
         {
             Health = health;
         }

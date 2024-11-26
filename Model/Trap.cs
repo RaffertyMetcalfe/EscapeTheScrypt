@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using EscapeTheCrypt.Model.Entities;
+using System;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using EscapeTheCrypt.Model.Entities;
 
 namespace EscapeTheCrypt.Model
 {
