@@ -15,7 +15,7 @@ namespace EscapeTheCrypt.Model.Entities
         private List<Item> Inventory { get; } = new List<Item>();
         private Dictionary<String, Item> ArmourSlots { get; }
 
-        public Player(String name, int health, Room location) : base(health)
+        public Player(String name, Room location, int health = 100) : base(location, health)
         {
             Location = location;
             Name = name;
@@ -40,7 +40,7 @@ namespace EscapeTheCrypt.Model.Entities
 
         public void Drop(String itemName)
         {
-            var item = FindItemInInventory(itemName);
+            Item item = FindItemInInventory(itemName);
             if (item != null)
             {
                 Inventory.Remove(item);
@@ -54,7 +54,7 @@ namespace EscapeTheCrypt.Model.Entities
 
         public void UseItem(String itemName, Entity target)
         {
-            var item = FindItemInInventory(itemName);
+            Item item = FindItemInInventory(itemName);
             if (item != null)
             {
                 item.Use(target);
@@ -91,7 +91,7 @@ namespace EscapeTheCrypt.Model.Entities
 
         public void EquipItem(String itemName)
         {
-            var item = FindItemInInventory(itemName);
+            Item item = FindItemInInventory(itemName);
             if (item != null)
             {
                 Console.WriteLine($"{Name} equips {item.Name}.");
@@ -130,9 +130,9 @@ namespace EscapeTheCrypt.Model.Entities
 
         private Item FindItemInInventory(String itemName)
         {
-            if (Inventory != null)
+            if (Inventory.Any())
             {
-                return Inventory.FirstOrDefault(item => item.Name == itemName);
+                return Inventory.Find(item => item.Name == itemName);
             }
             return null;
         }

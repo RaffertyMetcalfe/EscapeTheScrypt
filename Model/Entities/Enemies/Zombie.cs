@@ -7,7 +7,7 @@ namespace EscapeTheCrypt.Model.Entities.Enemies
     {
         public override Dictionary<Item, int> Loot { get; protected set; }
 
-        public Zombie(int health) : base(health)
+        public Zombie(Room location, int health = 20) : base(location, health)
         {
             Loot = new Dictionary<Item, int>
             {
