@@ -1,6 +1,7 @@
-﻿using System.Text;
-using EscapeTheCrypt.Model.Entities;
+﻿using EscapeTheCrypt.Model.Entities;
 using EscapeTheCrypt.Model.ItemType;
+using System;
+using System.Linq;
 
 namespace EscapeTheCrypt.Model
 {
@@ -8,20 +9,28 @@ namespace EscapeTheCrypt.Model
     {
         public String Name { get; private set; }
         public String Description { get; private set; }
-        public bool Locked { get; set; }
+        private bool _locked;
+        public bool Locked
+        {
+            get => _locked;
+            set => _locked = value;
+        }
 
         public Dictionary<String, Room> Exits { get; private set; } = new Dictionary<String, Room>();
         public Dictionary<Item, int> Items { get; private set; } = new Dictionary<Item, int>();
-        public List<Enemy> Enemies { get; private set; } = new();
+        public List<Enemy> Enemies { get; private set; }
         public List<Trap> Traps { get; private set; } = new List<Trap>();
-        public String ID {  get; private set; }
 
-        public Room(String id, String name, String description, List<Trap>? traps = null, bool locked = false)
+        public Room(String name, String description, List<Enemy> enemies, List<Trap>? traps = null, bool locked = false)
         {
-            ID = id;
             Name = name;
             Description = description;
-            Locked = locked;
+            Enemies = enemies;
+            for (int i = 0; i < enemies.Count; i++)
+            {
+                enemies[i].Location = this;
+            }
+            _locked = locked;
         }
 
         public void Connect(String direction, Room room)
@@ -33,7 +42,7 @@ namespace EscapeTheCrypt.Model
         {
             if (key.Room == this)
             {
-                Locked = false;
+                _locked = false;
                 return true;
             }
             return false;
@@ -71,32 +80,31 @@ namespace EscapeTheCrypt.Model
             }
         }
 
-        public Enemy? GetEnemyFromName(String name)
+        public Enemy GetEnemyFromName(String name)
         {
-            return Enemies.Find(enemy => enemy.Name() == name);
+            return Enemies.FirstOrDefault(enemy => enemy.Name() == name);
         }
 
         public String GetContents()
         {
-            StringBuilder contents = new StringBuilder();
-            contents.Append($"{Name}:\n");
-            contents.Append($"Description: {Description}\n");
-            contents.Append("Exits:\n");
+            var contents = $"{Name}:\n";
+            contents += $"Description: {Description}\n";
+            contents += "Exits:\n";
             foreach (var exit in Exits)
             {
-                contents.Append($"{exit.Key}: {exit.Value.Name}\n");
+                contents += $"{exit.Key}: {exit.Value.Name}\n";
             }
-            contents.Append("Items:\n");
+            contents += "Items:\n";
             foreach (var item in Items)
             {
-                contents.Append($"{item.Value}x {item.Key.Name}\n");
+                contents += $"{item.Value}x {item.Key.Name}\n";
             }
-            contents.Append("Enemies:\n");
+            contents += "Enemies:\n";
             foreach (var enemy in Enemies)
             {
-                contents.Append($"{enemy.Name()}\n");
+                contents += $"{enemy.Name()}\n";
             }
-            return contents.ToString().Trim();
+            return contents.Trim();
         }
 
         public void AddEnemy(Enemy enemy)

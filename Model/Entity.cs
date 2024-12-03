@@ -14,9 +14,8 @@ namespace EscapeTheCrypt.Model
         public List<TickDamage> TickDamages { get; set; } = new List<TickDamage>();
         private readonly List<IEffect> activeEffects = new();
 
-        protected Entity(Room location, int health)
+        protected Entity(int health)
         {
-            Location = location;
             Health = health;
             Protection = new Dictionary<String, int>
             {
